@@ -17,6 +17,6 @@
             <Label fx:id="date" alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="25.0" text="Date du jour" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" />
          </children>
       </AnchorPane>
-      <VBox fx:id="schedule" prefHeight="200.0" prefWidth="100.0" />
+      <AnchorPane fx:id="schedule" />
    </children>
 </VBox>

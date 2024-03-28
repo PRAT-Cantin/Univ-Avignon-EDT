@@ -1,12 +1,13 @@
 package com.example.edtunivavignon;
 
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class WeekController {
     @FXML
@@ -51,32 +52,40 @@ public class WeekController {
         monday.getChildren().add(mondayLoader.load());
         mondayController = mondayLoader.getController();
         mondayController.setBinding(monday.prefWidthProperty(),monday.prefHeightProperty());
+        mondayController.setDayOfTheWeek("Lundi");
 
         FXMLLoader tuesdayLoader = new FXMLLoader(WeekController.class.getResource("weekday.fxml"));
         tuesday.getChildren().add(tuesdayLoader.load());
         tuesdayController = tuesdayLoader.getController();
         tuesdayController.setBinding(tuesday.prefWidthProperty(),tuesday.prefHeightProperty());
+        tuesdayController.setDayOfTheWeek("Mardi");
 
         FXMLLoader wednesdayLoader = new FXMLLoader(WeekController.class.getResource("weekday.fxml"));
         wednesday.getChildren().add(wednesdayLoader.load());
         wednesdayController = wednesdayLoader.getController();
         wednesdayController.setBinding(wednesday.prefWidthProperty(),wednesday.prefHeightProperty());
+        wednesdayController.setDayOfTheWeek("Mercredi");
 
         FXMLLoader thursdayLoader = new FXMLLoader(WeekController.class.getResource("weekday.fxml"));
         thursday.getChildren().add(thursdayLoader.load());
         thursdayController = thursdayLoader.getController();
         thursdayController.setBinding(thursday.prefWidthProperty(),thursday.prefHeightProperty());
+        thursdayController.setDayOfTheWeek("Jeudi");
 
         FXMLLoader fridayLoader = new FXMLLoader(WeekController.class.getResource("weekday.fxml"));
         friday.getChildren().add(fridayLoader.load());
         fridayController = fridayLoader.getController();
         fridayController.setBinding(friday.prefWidthProperty(),friday.prefHeightProperty());
-
-
+        fridayController.setDayOfTheWeek("Vendredi");
     }
 
     @FXML
-    public void onTestButtonClicked(MouseEvent t) {
-        mondayController.addReservation(edtCalendar.getReservations().get(0));
+    public void onTestButtonClicked(MouseEvent t) throws IOException {
+        ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(LocalDateTime.now().plusWeeks(1));
+        mondayController.addDailyReservations(weeklyReservations.get(0));
+        tuesdayController.addDailyReservations(weeklyReservations.get(1));
+        wednesdayController.addDailyReservations(weeklyReservations.get(2));
+        thursdayController.addDailyReservations(weeklyReservations.get(3));
+        fridayController.addDailyReservations(weeklyReservations.get(4));
     }
 }

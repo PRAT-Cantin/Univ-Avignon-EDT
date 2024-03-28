@@ -2,7 +2,6 @@ package com.example.edtunivavignon;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Reservation {
     private LocalDateTime start;
@@ -14,6 +13,7 @@ public class Reservation {
     private String nameOfReservation;
     private String memo;
     private ArrayList<String> attendingGroups;
+    private ArrayList<String> attendingPromotions;
     private String type;
     private Boolean isHoliday;
 
@@ -22,16 +22,24 @@ public class Reservation {
         return "Reservation{" +
                 "start=" + start +
                 ", end=" + end +
-                ", lastModified=" + lastModified +
-                ", uid='" + uid + '\'' +
-                ", rooms=" + rooms +
+                //", lastModified=" + lastModified +
+                //", uid='" + uid + '\'' +
+                //", rooms=" + rooms +
                 ", teachers=" + teachers +
                 ", nameOfReservation='" + nameOfReservation + '\'' +
-                ", memo='" + memo + '\'' +
-                ", attendingGroups=" + attendingGroups +
-                ", type='" + type + '\'' +
-                ", isHoliday=" + isHoliday +
+                //", memo='" + memo + '\'' +
+                //", attendingGroups=" + attendingGroups +
+                //", type='" + type + '\'' +
+                //", isHoliday=" + isHoliday +
                 '}';
+    }
+
+    public ArrayList<String> getAttendingPromotions() {
+        return attendingPromotions;
+    }
+
+    public void setAttendingPromotions(ArrayList<String> attendingPromotions) {
+        this.attendingPromotions = attendingPromotions;
     }
 
     public void setType(String type) {
