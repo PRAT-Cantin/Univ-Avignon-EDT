@@ -5,6 +5,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -85,7 +86,7 @@ public class WeekdayController {
         VBox vBox = new VBox();
         vBox.prefWidthProperty().bind(schedule.prefWidthProperty());
         vBox.prefHeightProperty().bind(schedule.prefHeightProperty());
-        vBox.setMouseTransparent(true);
+        vBox.setPickOnBounds(false);
         LocalDateTime previousReservationEnd = weeklyReservations.get(0).getStart().withHour(8).withMinute(0);
         long distanceToLastReservation;
         long reservationLength;
@@ -94,7 +95,6 @@ public class WeekdayController {
         for (Reservation reservation : weeklyReservations
              ) {
             distanceToLastReservation = (int) (Duration.between(previousReservationEnd,reservation.getStart()).toMinutes() / 30);
-            System.out.println(distanceToLastReservation);
             if (distanceToLastReservation > 0) {
                 region = new Region();
                 region.prefWidthProperty().bind(vBox.prefWidthProperty());
@@ -107,9 +107,13 @@ public class WeekdayController {
             FXMLLoader fxmlLoader = new FXMLLoader(WeekdayController.class.getResource("reservation.fxml"));
             pane = fxmlLoader.load();
             ReservationController reservationController = fxmlLoader.getController();
+            Tooltip tooltip = new Tooltip();
+            tooltip.setText(reservation.toTooltip());
+            tooltip.setShowDelay(javafx.util.Duration.seconds(0));
+            Tooltip.install(pane,tooltip);
             pane.prefWidthProperty().bind(vBox.prefWidthProperty());
             pane.prefHeightProperty().bind(vBox.prefHeightProperty().divide(24).multiply(reservationLength));
-            pane.setStyle("-fx-background-color: lightblue;-fx-border-color: lightgray");
+            pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
             reservationController.setAll(reservation);
             vBox.getChildren().add(pane);
         }

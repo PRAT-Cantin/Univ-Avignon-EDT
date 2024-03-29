@@ -11,15 +11,15 @@ import java.util.Objects;
 public class ReservationController {
 
     @FXML
-    public Label hours;
+    private Label hours;
     @FXML
-    public Label rooms;
+    private Label rooms;
     @FXML
-    public Label information;
+    private Label information;
     @FXML
-    public VBox vBox;
+    private VBox vBox;
     @FXML
-    public AnchorPane root;
+    private AnchorPane root;
 
     @FXML
     public void initialize() {
@@ -63,7 +63,7 @@ public class ReservationController {
         }
 
         if (Objects.equals(reservation.getType(), "Evaluation")) {
-            root.setStyle("-fx-background-color: salmon;-fx-border-color: salmon");
+            root.setStyle("-fx-background-color: salmon;-fx-border-color: salmon;-fx-background-radius: 10; -fx-border-radius: 10");
             hours.setStyle("-fx-text-fill: white;-fx-font-weight: bold");
             rooms.setStyle("-fx-text-fill: white;-fx-font-weight: bold");
             information.setStyle("-fx-background-color: lightblue");

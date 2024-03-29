@@ -81,7 +81,7 @@ public class WeekController {
 
     @FXML
     public void onTestButtonClicked(MouseEvent t) throws IOException {
-        ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(LocalDateTime.now().plusWeeks(1));
+        ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(LocalDateTime.now().plusWeeks(0));
         mondayController.addDailyReservations(weeklyReservations.get(0));
         tuesdayController.addDailyReservations(weeklyReservations.get(1));
         wednesdayController.addDailyReservations(weeklyReservations.get(2));

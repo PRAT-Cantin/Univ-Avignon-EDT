@@ -133,4 +133,62 @@ public class Reservation {
     public Boolean getHoliday() {
         return isHoliday;
     }
+
+    private String listToString(ArrayList<String> list, String name) {
+        String extraInfo = "";
+        if (list != null) {
+            extraInfo += name;
+            if (list.size() > 1) {
+                extraInfo += "s";
+            }
+            extraInfo += " : ";
+            for (String element: list
+            ) {
+                extraInfo += element;
+            }
+            extraInfo += "\n";
+        }
+        return extraInfo;
+    }
+
+    public String toTooltip() {
+        String extraInfo = "";
+        if (isHoliday) {
+            extraInfo = "Ferié";
+            return extraInfo;
+        }
+        String startEnd = start.getHour() + ":" + start.getMinute();
+        if (start.getMinute() == 0) {
+            startEnd += "0";
+        }
+        startEnd += " - " + end.getHour() + ":" + end.getMinute();
+        if (end.getMinute() == 0) {
+            startEnd += "0";
+        }
+        startEnd += " / ";
+        if (type != null)
+            startEnd += type;
+
+        extraInfo += startEnd + "\n";
+
+        String allRooms = "";
+        for (String room : rooms
+        ) {
+            allRooms += room;
+        }
+
+        extraInfo += allRooms + "\n";
+
+        extraInfo += "Matière : " + nameOfReservation+ "\n";
+
+        extraInfo += listToString(teachers,"Enseignant");
+        extraInfo += listToString(attendingPromotions,"Promotion");
+        extraInfo += listToString(attendingGroups,"TD");
+        extraInfo += listToString(rooms,"Salle");
+        if (type != null)
+            extraInfo += "Type : " + type+ "\n";
+        if (memo != null)
+            extraInfo += memo;
+        return extraInfo;
+    }
 }
