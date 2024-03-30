@@ -56,10 +56,16 @@ public class ReservationController {
             startEnd += reservation.getType();
         hours.setText(startEnd);
 
-        String allRooms = "";
-        for (String room : reservation.getRooms()
-             ) {
-            allRooms += room;
+        if (reservation.getRooms() != null) {
+            String allRooms = "";
+            for (String room : reservation.getRooms()
+            ) {
+                allRooms += room;
+            }
+            rooms.setText(allRooms);
+        }
+        else {
+            rooms.setText("");
         }
 
         if (Objects.equals(reservation.getType(), "Evaluation")) {
@@ -69,7 +75,6 @@ public class ReservationController {
             information.setStyle("-fx-background-color: lightblue");
         }
 
-        rooms.setText(allRooms);
         rooms.prefWidthProperty().bind(vBox.prefWidthProperty());
 
         String extraInfo = "Matière : " + reservation.getNameOfReservation() + "\n";

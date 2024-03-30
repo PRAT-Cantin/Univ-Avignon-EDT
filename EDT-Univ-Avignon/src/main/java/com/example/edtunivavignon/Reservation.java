@@ -2,6 +2,7 @@ package com.example.edtunivavignon;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Reservation {
     private LocalDateTime start;
@@ -22,15 +23,15 @@ public class Reservation {
         return "Reservation{" +
                 "start=" + start +
                 ", end=" + end +
-                //", lastModified=" + lastModified +
-                //", uid='" + uid + '\'' +
-                //", rooms=" + rooms +
+                ", lastModified=" + lastModified +
+                ", uid='" + uid + '\'' +
+                ", rooms=" + rooms +
                 ", teachers=" + teachers +
                 ", nameOfReservation='" + nameOfReservation + '\'' +
-                //", memo='" + memo + '\'' +
-                //", attendingGroups=" + attendingGroups +
-                //", type='" + type + '\'' +
-                //", isHoliday=" + isHoliday +
+                ", memo='" + memo + '\'' +
+                ", attendingGroups=" + attendingGroups +
+                ", type='" + type + '\'' +
+                ", isHoliday=" + isHoliday +
                 '}';
     }
 
@@ -171,14 +172,15 @@ public class Reservation {
 
         extraInfo += startEnd + "\n";
 
-        String allRooms = "";
-        for (String room : rooms
-        ) {
-            allRooms += room;
+        if (rooms != null) {
+            String allRooms = "";
+            for (String room : rooms
+            ) {
+                allRooms += room;
+            }
+
+            extraInfo += allRooms + "\n";
         }
-
-        extraInfo += allRooms + "\n";
-
         extraInfo += "Matière : " + nameOfReservation+ "\n";
 
         extraInfo += listToString(teachers,"Enseignant");
@@ -190,5 +192,17 @@ public class Reservation {
         if (memo != null)
             extraInfo += memo;
         return extraInfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Reservation that)) return false;
+        return Objects.equals(getStart(), that.getStart()) && Objects.equals(getEnd(), that.getEnd()) && Objects.equals(getLastModified(), that.getLastModified()) && Objects.equals(getRooms(), that.getRooms()) && Objects.equals(getTeachers(), that.getTeachers()) && Objects.equals(getNameOfReservation(), that.getNameOfReservation()) && Objects.equals(getMemo(), that.getMemo()) && Objects.equals(getAttendingGroups(), that.getAttendingGroups()) && Objects.equals(getAttendingPromotions(), that.getAttendingPromotions()) && Objects.equals(getType(), that.getType()) && Objects.equals(isHoliday, that.isHoliday);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStart(), getEnd(), getLastModified(), getRooms(), getTeachers(), getNameOfReservation(), getMemo(), getAttendingGroups(), getAttendingPromotions(), getType(), isHoliday);
     }
 }

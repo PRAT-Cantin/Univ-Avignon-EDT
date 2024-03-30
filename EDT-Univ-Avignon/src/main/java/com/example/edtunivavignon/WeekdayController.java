@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -25,8 +26,8 @@ public class WeekdayController {
     AnchorPane labels;
     @FXML
     private VBox root;
-
     private VBox intervals;
+    private VBox courses;
 
     @FXML
     public void initialize() {
@@ -66,6 +67,8 @@ public class WeekdayController {
             }
         }
         schedule.getChildren().add(intervals);
+        courses = new VBox();
+        schedule.getChildren().add(courses);
     }
 
     public void setDayOfTheWeek(String dayOfTheWeek) {
@@ -82,11 +85,11 @@ public class WeekdayController {
     }
 
     public void addDailyReservations(ArrayList<Reservation> weeklyReservations) throws IOException {
+        courses.getChildren().clear();
         if (weeklyReservations.isEmpty()) return;
-        VBox vBox = new VBox();
-        vBox.prefWidthProperty().bind(schedule.prefWidthProperty());
-        vBox.prefHeightProperty().bind(schedule.prefHeightProperty());
-        vBox.setPickOnBounds(false);
+        courses.prefWidthProperty().bind(schedule.prefWidthProperty());
+        courses.prefHeightProperty().bind(schedule.prefHeightProperty());
+        courses.setPickOnBounds(false);
         LocalDateTime previousReservationEnd = weeklyReservations.get(0).getStart().withHour(8).withMinute(0);
         long distanceToLastReservation;
         long reservationLength;
@@ -97,10 +100,10 @@ public class WeekdayController {
             distanceToLastReservation = (int) (Duration.between(previousReservationEnd,reservation.getStart()).toMinutes() / 30);
             if (distanceToLastReservation > 0) {
                 region = new Region();
-                region.prefWidthProperty().bind(vBox.prefWidthProperty());
-                region.prefHeightProperty().bind(vBox.prefHeightProperty().divide(24).multiply(distanceToLastReservation));
+                region.prefWidthProperty().bind(courses.prefWidthProperty());
+                region.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(distanceToLastReservation));
                 region.setMouseTransparent(true);
-                vBox.getChildren().add(region);
+                courses.getChildren().add(region);
             }
             previousReservationEnd = reservation.getEnd();
             reservationLength = (int) (Duration.between(reservation.getStart(),reservation.getEnd()).toMinutes() / 30);
@@ -110,13 +113,14 @@ public class WeekdayController {
             Tooltip tooltip = new Tooltip();
             tooltip.setText(reservation.toTooltip());
             tooltip.setShowDelay(javafx.util.Duration.seconds(0));
+            tooltip.setHideDelay(javafx.util.Duration.seconds(0));
             Tooltip.install(pane,tooltip);
-            pane.prefWidthProperty().bind(vBox.prefWidthProperty());
-            pane.prefHeightProperty().bind(vBox.prefHeightProperty().divide(24).multiply(reservationLength));
+            pane.prefWidthProperty().bind(courses.prefWidthProperty());
+            pane.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(reservationLength));
+            pane.setCursor(Cursor.HAND);
             pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
             reservationController.setAll(reservation);
-            vBox.getChildren().add(pane);
+            courses.getChildren().add(pane);
         }
-        schedule.getChildren().add(vBox);
     }
 }

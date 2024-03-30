@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class EDTCalendar {
     private LocalDateTime calendarStart;
@@ -70,14 +71,20 @@ public class EDTCalendar {
         reservations.sort(Comparator.comparing(Reservation::getStart));
         ArrayList<Reservation> dailyReservations = new ArrayList<>();
         int dayStart = 0;
-        while (reservations.get(dayStart).getStart().isBefore(beginningOfWeek)) {
+        while (dayStart < reservations.size() && reservations.get(dayStart).getStart().isBefore(beginningOfWeek)) {
             dayStart++;
         }
+        if (dayStart == reservations.size())
+            return  dailyReservations;
         int dayEnd = dayStart;
-        while (reservations.get(dayEnd).getStart().isBefore(beginningOfWeek.plusDays(1))) {
+        while (dayEnd < reservations.size() && reservations.get(dayEnd).getStart().isBefore(beginningOfWeek.plusDays(1))) {
             dailyReservations.add(reservations.get(dayEnd));
             dayEnd++;
         }
         return dailyReservations;
+    }
+
+    public void removeDuplicates() {
+        reservations = new ArrayList<>(new HashSet<> (reservations));
     }
 }
