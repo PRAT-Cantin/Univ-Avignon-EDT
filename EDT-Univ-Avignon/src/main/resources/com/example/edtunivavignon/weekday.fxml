@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox fx:id="root" prefHeight="400.0" style="-fx-border-color: lightgray;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.edtunivavignon.WeekdayController">
+
+
+<AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.edtunivavignon.WeekdayController">
    <children>
-      <AnchorPane fx:id="labels" style="-fx-background-color: lightblue;">
+      <VBox prefHeight="400.0" prefWidth="128.0" style="-fx-border-color: lightgray;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label fx:id="dayOfTheWeek" alignment="CENTER" contentDisplay="CENTER" layoutX="58.0" layoutY="4.0" style="-fx-font-weight: bold;" text="Jour de la semaine" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label fx:id="date" alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="25.0" text="Date du jour" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" />
+            <AnchorPane fx:id="labels" style="-fx-background-color: lightblue;">
+               <children>
+                  <Label fx:id="dayOfTheWeek" alignment="CENTER" contentDisplay="CENTER" layoutX="58.0" layoutY="4.0" style="-fx-font-weight: bold;" text="Jour de la semaine" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="date" alignment="CENTER" contentDisplay="CENTER" layoutX="90.0" layoutY="25.0" text="Date du jour" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="schedule" />
          </children>
-      </AnchorPane>
-      <AnchorPane fx:id="schedule" />
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

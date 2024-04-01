@@ -70,7 +70,7 @@
                         <Insets left="10.0" top="10.0" />
                      </StackPane.margin>
                   </HBox>
-                  <ComboBox fx:id="displayMode" prefWidth="150.0">
+                  <ComboBox fx:id="displayMode" onAction="#changeDisplayMode" prefWidth="150.0">
                      <StackPane.margin>
                         <Insets right="10.0" top="10.0" />
                      </StackPane.margin>

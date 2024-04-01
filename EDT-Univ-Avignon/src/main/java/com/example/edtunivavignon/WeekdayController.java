@@ -13,9 +13,11 @@ import javafx.scene.layout.*;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class WeekdayController {
+public class WeekdayController implements CalendarController {
     @FXML
     private Label dayOfTheWeek;
     @FXML
@@ -25,12 +27,16 @@ public class WeekdayController {
     @FXML
     AnchorPane labels;
     @FXML
-    private VBox root;
+    private AnchorPane root;
     private VBox intervals;
     private VBox courses;
+    private EDTCalendar edtCalendar;
+    private LocalDateTime currentlyDisplayed;
+
 
     @FXML
     public void initialize() {
+        currentlyDisplayed = LocalDateTime.now();
         Pane pane;
         schedule.prefWidthProperty().bind(root.prefWidthProperty());
         schedule.prefHeightProperty().bind(root.prefHeightProperty().subtract(labels.heightProperty()));
@@ -121,5 +127,47 @@ public class WeekdayController {
             reservationController.setAll(reservation);
             courses.getChildren().add(pane);
         }
+    }
+
+    public void updateDisplay() throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", Locale.FRENCH);
+        setDayOfTheWeek(currentlyDisplayed.format(formatter));
+        formatter = DateTimeFormatter.ofPattern("MMMM d");
+        setDate(currentlyDisplayed.format(formatter));
+        setDailyReservations(edtCalendar.findDailyReservations(currentlyDisplayed));
+
+    }
+    @Override
+    public void setEdtToDisplay(String url) throws IOException {
+        edtCalendar = ICSParser.readICS(url);
+    }
+
+    @Override
+    public void displayNext() throws IOException {
+        currentlyDisplayed = currentlyDisplayed.plusDays(1);
+        updateDisplay();
+    }
+
+    @Override
+    public void displayToday() throws IOException {
+        currentlyDisplayed = LocalDateTime.now();
+        updateDisplay();
+    }
+
+    @Override
+    public void displayPrevious() throws IOException {
+        currentlyDisplayed = currentlyDisplayed.plusDays(-1);
+        updateDisplay();
+    }
+
+    @Override
+    public void displaySpecific(LocalDateTime localDateTime) throws IOException {
+        currentlyDisplayed = localDateTime;
+        updateDisplay();
+    }
+
+    @Override
+    public LocalDateTime getDisplayedDate() {
+        return currentlyDisplayed;
     }
 }

@@ -10,7 +10,7 @@ public class UserDB {
             conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/com/example/edtunivavignon/db/users.db");
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
-                String sql = "CREATE TABLE users(userName VARCHAR(100), password VARCHAR(100), personalTimeTable VARCHAR(1000), darkMode BOOLEAN DEFAULT false)";
+                String sql = "CREATE TABLE users(userName VARCHAR(100), password VARCHAR(100), personalTimeTable VARCHAR(1000), darkMode BOOLEAN DEFAULT false, admin BOOLEAN)";
                 Statement statement = conn.createStatement();
                 statement = conn.createStatement();
                 //statement.executeQuery(sql);

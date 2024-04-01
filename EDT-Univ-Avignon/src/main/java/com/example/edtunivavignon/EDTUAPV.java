@@ -45,7 +45,9 @@ public class EDTUAPV extends Application { ;
             Platform.exit();
         });
         loginModal.showAndWait();
-        edtController.setUser(loginController.getUser());
+        User user = loginController.getUser();
+        if (user != null)
+            edtController.setUser(user);
 
     }
 

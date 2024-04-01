@@ -49,18 +49,15 @@ public class EDTController {
         controls.prefHeightProperty().bind(vBox.prefHeightProperty().divide(10));
         controls.setMinHeight(0);
         FXMLLoader fxmlLoader = new FXMLLoader(EDTController.class.getResource("weekView.fxml"));
-        edtView = fxmlLoader.load();
-        edtView.prefHeightProperty().bind(vBox.prefHeightProperty().divide(10).multiply(9));
-        edtView.prefWidthProperty().bind(vBox.prefWidthProperty());
-        edtView.setMinHeight(0);
-        edtController = fxmlLoader.getController();
-        vBox.getChildren().add(edtView);
+        setDisplayMode(fxmlLoader);
         month.prefWidthProperty().bind(controls.prefWidthProperty());
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         month.setText(LocalDateTime.now().format(dateTimeFormatter).toUpperCase());
         StackPane.setAlignment(controlsHbox, Pos.TOP_LEFT);
         StackPane.setAlignment(displayMode,Pos.TOP_RIGHT);
         StackPane.setAlignment(month,Pos.BOTTOM_CENTER);
+        displayMode.getItems().addAll("Jour","Semaine","Mois");
+        displayMode.setValue("Semaine");
     }
 
     public void setToToday(ActionEvent  event) throws IOException {
@@ -85,5 +82,41 @@ public class EDTController {
         this.user = user;
         edtController.setEdtToDisplay(user.getEdtURL());
         edtController.displayToday();
+    }
+
+    public void setDisplayMode(FXMLLoader fxmlLoader) throws IOException {
+        if (vBox.getChildren().size() > 1) {
+            vBox.getChildren().remove(vBox.getChildren().size()-1);
+        }
+        edtView = fxmlLoader.load();
+        edtView.prefHeightProperty().bind(vBox.prefHeightProperty().divide(10).multiply(9));
+        edtView.prefWidthProperty().bind(vBox.prefWidthProperty());
+        edtView.setMinHeight(0);
+        LocalDateTime previousDate = LocalDateTime.now();
+        if (edtController != null) {
+            previousDate = edtController.getDisplayedDate();
+        }
+        edtController = fxmlLoader.getController();
+        vBox.getChildren().add(edtView);
+        if (user != null) {
+            edtController.setEdtToDisplay(user.getEdtURL());
+            edtController.displaySpecific(previousDate);
+        }
+    }
+
+    public void changeDisplayMode(ActionEvent actionEvent) throws IOException {
+        switch (displayMode.getValue().toString()) {
+            case "Jour":
+                System.out.println("jour");
+                setDisplayMode(new FXMLLoader(EDTController.class.getResource("weekDay.fxml")));
+                return;
+            case "Semaine":
+                System.out.println("Semaine");
+                setDisplayMode(new FXMLLoader(EDTController.class.getResource("weekView.fxml")));
+                return;
+            case "Mois":
+                System.out.println("Mois");
+                return;
+        }
     }
 }

@@ -48,9 +48,6 @@ public class WeekController implements CalendarController {
         thursday.prefHeightProperty().bind(root.prefHeightProperty());
         friday.prefHeightProperty().bind(root.prefHeightProperty());
 
-        //edtCalendar = ICSParser.readICS("https://edt-api.univ-avignon.fr/api/exportAgenda/tdoption/def50200ad5a0ca5125bdb750196290524cae727ac39a81f9db9e9741ca5b0964fb9817c6c12c28a5093cf2325a9c9db60b66bb0bac5d0ee31b5e5dacbad7e352956879ca36257c22197d8edc7087687f097470a2e168421ca548440a8933ed37b6b09d094b149");
-        edtCalendar = ICSParser.readICS("https://edt-api.univ-avignon.fr/api/exportAgenda/tdoption/def502001eafd38c6be9b62798de135592ecdecec8d8f8c6dc24d4a29b99ab29b20b16c500d11e5fb9815a21952b048a697e9b8cd43bb905521c03c03793609b386e8fb17197b0ccafd5d21d3b2332e91120c702d6c26ed8");
-
         //Load WeekDays
         FXMLLoader mondayLoader = new FXMLLoader(WeekController.class.getResource("weekday.fxml"));
         monday.getChildren().add(mondayLoader.load());

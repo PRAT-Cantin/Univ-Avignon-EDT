@@ -1,10 +1,15 @@
 package com.example.edtunivavignon;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -88,6 +93,24 @@ public class ReservationController {
         if (reservation.getMemo() != null)
             extraInfo += reservation.getMemo();
         information.setText(extraInfo);
+        if (reservation.getTeachers() != null) {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem menuItem = new MenuItem("Envoyer un mail au professeur");
+            menuItem.setOnAction(event -> {
+                Desktop desktop = Desktop.getDesktop();
+                String message = "mailto:";
+                message += reservation.getTeachers().get(0).split(" ")[1].toLowerCase() + "." + reservation.getTeachers().get(0).split(" ")[0].toLowerCase();
+                message += "@univ-avignon";
+                URI uri = URI.create(message);
+                try {
+                    desktop.mail(uri);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            contextMenu.getItems().add(menuItem);
+            information.setContextMenu(contextMenu);
+        }
     }
 
     private String listToString(ArrayList<String> list, String name) {
