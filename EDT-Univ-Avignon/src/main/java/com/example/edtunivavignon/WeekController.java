@@ -92,19 +92,19 @@ public class WeekController implements CalendarController {
         ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(currentlyDisplayed);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM d");
         mondayController.addDailyReservations(weeklyReservations.get(0));
-        LocalDateTime dateTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        mondayController.setDate(dateTime.format(dateTimeFormatter));
+        LocalDateTime mondayTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        mondayController.setDate(mondayTime.format(dateTimeFormatter));
         tuesdayController.addDailyReservations(weeklyReservations.get(1));
-        dateTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.TUESDAY));
+        LocalDateTime dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.TUESDAY));
         tuesdayController.setDate(dateTime.format(dateTimeFormatter));
         wednesdayController.addDailyReservations(weeklyReservations.get(2));
-        dateTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.WEDNESDAY));
+        dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.WEDNESDAY));
         wednesdayController.setDate(dateTime.format(dateTimeFormatter));
         thursdayController.addDailyReservations(weeklyReservations.get(3));
-        dateTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.THURSDAY));
+        dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.THURSDAY));
         thursdayController.setDate(dateTime.format(dateTimeFormatter));
         fridayController.addDailyReservations(weeklyReservations.get(4));
-        dateTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
+        dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
         fridayController.setDate(dateTime.format(dateTimeFormatter));
     }
     @Override
