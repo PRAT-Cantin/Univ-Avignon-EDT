@@ -3,36 +3,42 @@ package com.example.edtunivavignon;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class EDTController {
     @FXML
-    public Label leftArrow;
+    private HBox controlsHbox;
     @FXML
-    public Button today;
+    private Label leftArrow;
     @FXML
-    public Label rightArrow;
+    private Button today;
     @FXML
-    public Label month;
+    private Label rightArrow;
     @FXML
-    public ComboBox displayMode;
+    private Label month;
     @FXML
-    public VBox controls;
+    private ComboBox displayMode;
     @FXML
-    public VBox vBox;
+    private StackPane controls;
     @FXML
-    public AnchorPane root;
+    private VBox vBox;
+    @FXML
+    private AnchorPane root;
     AnchorPane edtView;
     CalendarController edtController;
+    private User user;
 
 
 
@@ -50,6 +56,11 @@ public class EDTController {
         edtController = fxmlLoader.getController();
         vBox.getChildren().add(edtView);
         month.prefWidthProperty().bind(controls.prefWidthProperty());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        month.setText(LocalDateTime.now().format(dateTimeFormatter).toUpperCase());
+        StackPane.setAlignment(controlsHbox, Pos.TOP_LEFT);
+        StackPane.setAlignment(displayMode,Pos.TOP_RIGHT);
+        StackPane.setAlignment(month,Pos.BOTTOM_CENTER);
     }
 
     public void setToToday(ActionEvent  event) throws IOException {
@@ -68,5 +79,11 @@ public class EDTController {
         edtController.displayNext();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         month.setText(edtController.getDisplayedDate().format(dateTimeFormatter).toUpperCase());
+    }
+
+    public void setUser(User user) throws IOException {
+        this.user = user;
+        edtController.setEdtToDisplay(user.getEdtURL());
+        edtController.displayToday();
     }
 }

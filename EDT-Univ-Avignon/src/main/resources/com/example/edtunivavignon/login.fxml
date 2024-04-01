@@ -34,7 +34,7 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField fx:id="usernameInput" />
+                  <TextField fx:id="usernameInput" text="Cantin" />
                </children>
             </HBox>
             <Pane fx:id="middleSpacer" prefHeight="110.0" prefWidth="600.0" />
@@ -45,12 +45,17 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Label>
-                  <PasswordField fx:id="passwordInput" />
+                  <PasswordField fx:id="passwordInput" text="feur" />
                </children>
             </HBox>
             <StackPane fx:id="bottomSpacer" prefHeight="119.0" prefWidth="600.0">
                <children>
-                  <Button fx:id="sendButton" mnemonicParsing="false" onAction="#login" text="Se connecter" />
+                  <Button fx:id="sendButton" mnemonicParsing="false" onAction="#onButtonClick" text="Se connecter" />
+                  <Label fx:id="errorMsg" style="-fx-text-fill: red;">
+                     <StackPane.margin>
+                        <Insets right="10.0" />
+                     </StackPane.margin>
+                  </Label>
                </children>
             </StackPane>
          </children>

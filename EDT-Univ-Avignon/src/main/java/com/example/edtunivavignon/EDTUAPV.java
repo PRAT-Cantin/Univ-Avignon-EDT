@@ -6,10 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.sql.Connection;
@@ -24,6 +26,7 @@ public class EDTUAPV extends Application { ;
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(EDTUAPV.class.getResource("EDT.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        EDTController edtController = fxmlLoader.getController();
         stage.getIcons().add(new Image(Objects.requireNonNull(EDTUAPV.class.getResourceAsStream("logo_uapv_bleu.png"))));
         stage.setTitle("EDT UAPV");
         stage.setScene(scene);
@@ -42,7 +45,7 @@ public class EDTUAPV extends Application { ;
             Platform.exit();
         });
         loginModal.showAndWait();
-
+        edtController.setUser(loginController.getUser());
 
     }
 

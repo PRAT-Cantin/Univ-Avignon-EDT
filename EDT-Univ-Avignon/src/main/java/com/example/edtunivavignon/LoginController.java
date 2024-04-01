@@ -8,8 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.awt.event.KeyEvent;
 
 public class LoginController {
     @FXML
@@ -36,8 +39,10 @@ public class LoginController {
     private HBox passwordHbox;
     @FXML
     private ImageView logo;
-
+    @FXML
+    private Label errorMsg;
     private Stage stage;
+    private User user;
 
     @FXML
     public void initialize() {
@@ -57,14 +62,34 @@ public class LoginController {
         userNameLabel.prefHeightProperty().bind(userNameHbox.prefHeightProperty());
         userNameLabel.prefWidthProperty().bind(userNameHbox.prefWidthProperty().divide(10).multiply(3));
         StackPane.setAlignment(logo, Pos.CENTER);
+        StackPane.setAlignment(errorMsg,Pos.BOTTOM_RIGHT);
+        passwordInput.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
+            }
+        });
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-    public void login(ActionEvent event) {
+    public void onButtonClick(ActionEvent event) {
+        login();
+    }
+
+    public void login() {
+        UserDB userDB = new UserDB();
+        user = userDB.getUser(usernameInput.getText(),passwordInput.getText());
+        if (user == null) {
+            errorMsg.setText("Identifiant ou mot de passe incorrect");
+            return;
+        }
         stage.setOnCloseRequest(null);
         stage.close();
+    }
+
+    public User getUser() {
+        return user;
     }
 }

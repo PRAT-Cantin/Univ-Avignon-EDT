@@ -84,7 +84,7 @@ public class WeekdayController {
         root.prefHeightProperty().bind(height);
     }
 
-    public void addDailyReservations(ArrayList<Reservation> weeklyReservations) throws IOException {
+    public void setDailyReservations(ArrayList<Reservation> weeklyReservations) throws IOException {
         courses.getChildren().clear();
         if (weeklyReservations.isEmpty()) return;
         courses.prefWidthProperty().bind(schedule.prefWidthProperty());
@@ -117,7 +117,6 @@ public class WeekdayController {
             Tooltip.install(pane,tooltip);
             pane.prefWidthProperty().bind(courses.prefWidthProperty());
             pane.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(reservationLength));
-            pane.setCursor(Cursor.HAND);
             pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
             reservationController.setAll(reservation);
             courses.getChildren().add(pane);

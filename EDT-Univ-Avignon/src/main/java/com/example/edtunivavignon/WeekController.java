@@ -2,7 +2,6 @@ package com.example.edtunivavignon;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -11,8 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.concurrent.atomic.LongAccumulator;
 
 public class WeekController implements CalendarController {
     @FXML
@@ -84,29 +81,39 @@ public class WeekController implements CalendarController {
         fridayController = fridayLoader.getController();
         fridayController.setBinding(friday.prefWidthProperty(),friday.prefHeightProperty());
         fridayController.setDayOfTheWeek("Vendredi");
-
         currentlyDisplayed = LocalDateTime.now();
+        setAllDates();
     }
 
-    public void setAllReservations() throws IOException {
-        ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(currentlyDisplayed);
+    public void setAllDates() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMM d");
-        mondayController.addDailyReservations(weeklyReservations.get(0));
         LocalDateTime mondayTime = currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         mondayController.setDate(mondayTime.format(dateTimeFormatter));
-        tuesdayController.addDailyReservations(weeklyReservations.get(1));
         LocalDateTime dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.TUESDAY));
         tuesdayController.setDate(dateTime.format(dateTimeFormatter));
-        wednesdayController.addDailyReservations(weeklyReservations.get(2));
         dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.WEDNESDAY));
         wednesdayController.setDate(dateTime.format(dateTimeFormatter));
-        thursdayController.addDailyReservations(weeklyReservations.get(3));
         dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.THURSDAY));
         thursdayController.setDate(dateTime.format(dateTimeFormatter));
-        fridayController.addDailyReservations(weeklyReservations.get(4));
         dateTime = mondayTime.plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
         fridayController.setDate(dateTime.format(dateTimeFormatter));
     }
+
+    public void setAllReservations() throws IOException {
+        setAllDates();
+        ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(currentlyDisplayed);
+        mondayController.setDailyReservations(weeklyReservations.get(0));
+        tuesdayController.setDailyReservations(weeklyReservations.get(1));
+        wednesdayController.setDailyReservations(weeklyReservations.get(2));
+        thursdayController.setDailyReservations(weeklyReservations.get(3));
+        fridayController.setDailyReservations(weeklyReservations.get(4));
+    }
+
+    @Override
+    public void setEdtToDisplay(String url) throws IOException {
+        edtCalendar = ICSParser.readICS(url);
+    }
+
     @Override
     public void displayNext() throws IOException {
         currentlyDisplayed = currentlyDisplayed.plusWeeks(1);

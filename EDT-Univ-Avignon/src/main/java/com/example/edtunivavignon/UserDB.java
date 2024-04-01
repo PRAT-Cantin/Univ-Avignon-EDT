@@ -51,4 +51,19 @@ public class UserDB {
             System.out.println(e.getMessage());
         }
     }
+
+    public User getUser(String userName, String password) {
+        String query = "SELECT * FROM USERS WHERE userName='"+userName+"' AND password='"+password+"'";
+        try (Connection connection = connect()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            User user = null;
+            while (resultSet.next()) {
+                user = new User(resultSet.getString("userName"),resultSet.getString("personalTimeTable"),resultSet.getBoolean("darkMode"));
+            }
+            return user;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
 }
