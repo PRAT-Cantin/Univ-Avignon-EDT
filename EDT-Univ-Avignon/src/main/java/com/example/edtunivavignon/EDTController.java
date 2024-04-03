@@ -140,6 +140,7 @@ public class EDTController {
         VBox filters = new VBox();
         filters.prefWidthProperty().bind(calendarHbox.prefWidthProperty().divide(10));
         filters.prefHeightProperty().bind(calendarHbox.prefHeightProperty());
+        filters.getChildren().add(new Label("Matières : "));
         courses = new CheckComboBox<>();
         for (String course : edtController.getCourses()
              ) {
@@ -154,7 +155,8 @@ public class EDTController {
             }
         });
         filters.getChildren().add(courses);
-        
+
+        filters.getChildren().add(new Label("Groupes de TD : "));
         groups = new CheckComboBox<>();
         for (String group : edtController.getGroups()
         ) {
@@ -171,6 +173,7 @@ public class EDTController {
         });
         filters.getChildren().add(groups);
 
+        filters.getChildren().add(new Label("Salles : "));
         rooms = new CheckComboBox<>();
         for (String room : edtController.getRooms()
         ) {
@@ -187,6 +190,7 @@ public class EDTController {
         });
         filters.getChildren().add(rooms);
 
+        filters.getChildren().add(new Label("Types de cours : "));
         types = new CheckComboBox<>();
         for (String type : edtController.getTypes()
         ) {

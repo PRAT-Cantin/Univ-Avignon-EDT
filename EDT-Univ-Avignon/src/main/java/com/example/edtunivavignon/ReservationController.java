@@ -78,7 +78,7 @@ public class ReservationController {
             root.setStyle("-fx-background-color: salmon;-fx-border-color: salmon;-fx-background-radius: 10; -fx-border-radius: 10");
             hours.setStyle("-fx-text-fill: white;-fx-font-weight: bold");
             rooms.setStyle("-fx-text-fill: white;-fx-font-weight: bold");
-            information.setStyle("-fx-background-color: lightblue");
+            information.setStyle("-fx-background-color: lightblue;-fx-text-fill: black");
         }
 
         if (reservation.getColor() != null) {

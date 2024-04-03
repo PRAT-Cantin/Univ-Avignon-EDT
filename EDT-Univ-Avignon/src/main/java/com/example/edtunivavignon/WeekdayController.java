@@ -147,7 +147,7 @@ public class WeekdayController implements CalendarController {
             Boolean isValid = false;
             for (String group: reservation.getAttendingGroups()
                  ) {
-                if (!isInList(filteredGroups,group)) {
+                if (isInList(filteredGroups,group)) {
                     isValid = true;
                 }
             }
@@ -183,7 +183,6 @@ public class WeekdayController implements CalendarController {
         courses.setPickOnBounds(false);
         ArrayList<ArrayList<Reservation>> overlaps = getOverlappingReservations(weeklyReservations);
         LocalDateTime previousReservationEnd = weeklyReservations.get(0).getStart().withHour(8).withMinute(0);
-        System.out.println(currentlyDisplayed.getDayOfWeek());
         for (ArrayList<Reservation> overlap: overlaps
              ) {
             int i = 0;
