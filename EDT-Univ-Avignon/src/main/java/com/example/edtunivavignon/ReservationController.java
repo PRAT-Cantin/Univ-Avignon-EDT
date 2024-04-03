@@ -81,6 +81,10 @@ public class ReservationController {
             information.setStyle("-fx-background-color: lightblue");
         }
 
+        if (reservation.getColor() != null) {
+            root.setStyle("-fx-background-color: #"+reservation.getColor().substring(2));
+        }
+
         rooms.prefWidthProperty().bind(vBox.prefWidthProperty());
 
         String extraInfo = "Matière : " + reservation.getNameOfReservation() + "\n";

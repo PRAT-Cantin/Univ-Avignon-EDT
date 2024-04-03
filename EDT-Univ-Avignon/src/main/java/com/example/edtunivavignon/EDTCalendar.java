@@ -63,7 +63,15 @@ public class EDTCalendar {
     public void addReservation(Reservation reservation) {
         reservations.add(reservation);
     }
-
+    public ArrayList<ArrayList<ArrayList<Reservation>>> findMonthlyReservations(LocalDateTime dayOfTheMonth) {
+        ArrayList<ArrayList<ArrayList<Reservation>>> monthlyReservations = new ArrayList<>();
+        dayOfTheMonth = dayOfTheMonth.withDayOfMonth(1);
+        for (int i = 0; i < 5; i++) {
+            monthlyReservations.add(findWeeklyReservations(dayOfTheMonth));
+            dayOfTheMonth = dayOfTheMonth.plusWeeks(1);
+        }
+        return monthlyReservations;
+    }
     public ArrayList<ArrayList<Reservation>> findWeeklyReservations(LocalDateTime dayOfTheWeek) {
         LocalDateTime beginningOfWeek = dayOfTheWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).withHour(0);
         ArrayList<ArrayList<Reservation>> weeklyReservations = new ArrayList<>();
@@ -97,11 +105,8 @@ public class EDTCalendar {
             if (start.isBefore(reservations.get(i).getStart()) && end.isBefore(reservations.get(i).getStart())) {
                 continue;
             }
-            if ((start.isBefore(reservations.get(i).getStart()) || start.isEqual(reservations.get(i).getStart())) && (end.isAfter(reservations.get(i).getStart()) || end.isEqual(reservations.get(i).getEnd()))) {
+            if ((start.isBefore(reservations.get(i).getEnd()) || start.isEqual(reservations.get(i).getStart())) && (end.isAfter(reservations.get(i).getStart()) || end.isEqual(reservations.get(i).getEnd()))) {
                 return true;
-            }
-            if (start.isBefore(reservations.get(i).getEnd()) && end.isBefore(reservations.get(i).getEnd())) {
-                return false;
             }
         }
         return false;

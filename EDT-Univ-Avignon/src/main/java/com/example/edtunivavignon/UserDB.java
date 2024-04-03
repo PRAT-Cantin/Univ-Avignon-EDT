@@ -16,6 +16,10 @@ public class UserDB {
             //statement = conn.createStatement();
             //statement.executeQuery(sql);
 
+            //sql = "DROP TABLE events";
+            //statement = conn.createStatement();
+            //statement.executeQuery(sql);
+
              //sql = "CREATE TABLE users(userName VARCHAR(100), password VARCHAR(100), personalTimeTable VARCHAR(1000), darkMode BOOLEAN DEFAULT false, admin BOOLEAN)";
              //statement = conn.createStatement();
              //statement.executeQuery(sql);

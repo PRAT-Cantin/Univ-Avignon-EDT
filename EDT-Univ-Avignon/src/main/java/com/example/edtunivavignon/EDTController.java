@@ -164,6 +164,8 @@ public class EDTController {
                 return;
             case "Mois":
                 System.out.println("Mois");
+                loaderDisplayed = EDTController.class.getResource("monthView.fxml");
+                setDisplayMode();
                 return;
         }
     }

@@ -64,7 +64,8 @@ public class RoomReservationController {
 
     @FXML
     public void initialize() {
-        this.teachers.setText(teacherName);
+        if (isRoomReservation)
+            this.teachers.setText(teacherName);
         this.rooms.setValue(currentRoom);
         for (Map.Entry<String,String> entry : roomToURL.entrySet()
         ) {
@@ -139,23 +140,20 @@ public class RoomReservationController {
             startTime.setStyle("");
             endTime.setStyle("");
         }
-        System.out.println(isRoomReservation);
-        System.out.println(edtCalendar.checkIfTaken(eventStart,eventEnd));
         if (isRoomReservation && edtCalendar.checkIfTaken(eventStart,eventEnd)) {
             isValid = false;
             errorMsg.setText("Salle déjà occupée");
             return;
         }
         if (isValid) {
-
             UserDB userDB = new UserDB();
             String roomList = null;
             if (rooms.getValue() != null) {
                 roomList = rooms.getValue().toString();
             }
             String event = null;
-            if (rooms.getValue() != null) {
-                event = rooms.getValue().toString();
+            if (eventType.getValue() != null) {
+                event = eventType.getValue().toString();
             }
             userDB.addEvent(
                     owner,

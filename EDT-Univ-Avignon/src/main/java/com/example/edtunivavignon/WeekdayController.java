@@ -89,42 +89,89 @@ public class WeekdayController implements CalendarController {
         root.prefHeightProperty().bind(height);
     }
 
+    public Boolean checkOverlapping(LocalDateTime start1, LocalDateTime end1, LocalDateTime start2, LocalDateTime end2) {
+        if (start1.isBefore(end2) && end1.isAfter(start2)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean checkOneOverlapping(ArrayList<Reservation> reservations, Reservation reservationToTest) {
+        for (Reservation reservation:reservations
+             ) {
+            if (checkOverlapping(reservationToTest.getStart(),reservationToTest.getEnd(),reservation.getStart(),reservation.getEnd()))
+                return true;
+        }
+        return false;
+    }
+    public ArrayList<ArrayList<Reservation>> getOverlappingReservations(ArrayList<Reservation> weeklyReservations) {
+        ArrayList<ArrayList<Reservation>> groupsOfOverlapping = new ArrayList<>();
+        int i = 0;
+        while (i < weeklyReservations.size()) {
+            ArrayList<Reservation> overlappingGroup = new ArrayList<>();
+            overlappingGroup.add(weeklyReservations.get(i));
+            i++;
+            while (i < weeklyReservations.size() && checkOneOverlapping(overlappingGroup,weeklyReservations.get(i))) {
+                overlappingGroup.add(weeklyReservations.get(i));
+                i++;
+            }
+            groupsOfOverlapping.add(overlappingGroup);
+        }
+        return groupsOfOverlapping;
+    }
+
     public void setDailyReservations(ArrayList<Reservation> weeklyReservations) throws IOException {
         courses.getChildren().clear();
         if (weeklyReservations.isEmpty()) return;
         courses.prefWidthProperty().bind(schedule.prefWidthProperty());
         courses.prefHeightProperty().bind(schedule.prefHeightProperty());
         courses.setPickOnBounds(false);
+        ArrayList<ArrayList<Reservation>> overlaps = getOverlappingReservations(weeklyReservations);
         LocalDateTime previousReservationEnd = weeklyReservations.get(0).getStart().withHour(8).withMinute(0);
-        long distanceToLastReservation;
-        long reservationLength;
-        Region region;
-        AnchorPane pane;
-        for (Reservation reservation : weeklyReservations
+        for (ArrayList<Reservation> overlap: overlaps
              ) {
-            distanceToLastReservation = (int) (Duration.between(previousReservationEnd,reservation.getStart()).toMinutes() / 30);
+            LocalDateTime startOfHbox = overlap.get(0).getStart();
+            long distanceToLastReservation = (int) (Duration.between(previousReservationEnd,startOfHbox).toMinutes() / 30);
             if (distanceToLastReservation > 0) {
-                region = new Region();
+                Region region = new Region();
                 region.prefWidthProperty().bind(courses.prefWidthProperty());
                 region.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(distanceToLastReservation));
                 region.setMouseTransparent(true);
                 courses.getChildren().add(region);
             }
-            previousReservationEnd = reservation.getEnd();
-            reservationLength = (int) (Duration.between(reservation.getStart(),reservation.getEnd()).toMinutes() / 30);
-            FXMLLoader fxmlLoader = new FXMLLoader(WeekdayController.class.getResource("reservation.fxml"));
-            pane = fxmlLoader.load();
-            ReservationController reservationController = fxmlLoader.getController();
-            Tooltip tooltip = new Tooltip();
-            tooltip.setText(reservation.toTooltip());
-            tooltip.setShowDelay(javafx.util.Duration.seconds(0));
-            tooltip.setHideDelay(javafx.util.Duration.seconds(0));
-            Tooltip.install(pane,tooltip);
-            pane.prefWidthProperty().bind(courses.prefWidthProperty());
-            pane.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(reservationLength));
-            pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
-            reservationController.setAll(reservation);
-            courses.getChildren().add(pane);
+            HBox hBox = new HBox();
+            hBox.prefWidthProperty().bind(courses.prefWidthProperty());
+            for (Reservation reservation: overlap
+                 ) {
+                VBox vBox = new VBox();
+                long distanceToStartOfHbox = (int) (Duration.between(startOfHbox,reservation.getStart()).toMinutes() / 30);
+                if (distanceToStartOfHbox > 0) {
+                    Region region = new Region();
+                    region.prefWidthProperty().bind(courses.prefWidthProperty());
+                    region.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(distanceToStartOfHbox));
+                    region.setMouseTransparent(true);
+                    vBox.getChildren().add(region);
+                }
+                long reservationLength = (int) (Duration.between(reservation.getStart(),reservation.getEnd()).toMinutes() / 30);
+                FXMLLoader fxmlLoader = new FXMLLoader(WeekdayController.class.getResource("reservation.fxml"));
+                AnchorPane pane = fxmlLoader.load();
+                ReservationController reservationController = fxmlLoader.getController();
+                Tooltip tooltip = new Tooltip();
+                tooltip.setText(reservation.toTooltip());
+                tooltip.setShowDelay(javafx.util.Duration.seconds(0));
+                tooltip.setHideDelay(javafx.util.Duration.seconds(0));
+                Tooltip.install(pane,tooltip);
+                pane.prefWidthProperty().bind(hBox.prefWidthProperty().divide(overlap.size()));
+                pane.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(reservationLength));
+                pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
+                reservationController.setAll(reservation);
+                vBox.getChildren().add(pane);
+                hBox.getChildren().add(vBox);
+                if (reservation.getEnd().isAfter(previousReservationEnd)) {
+                    previousReservationEnd = reservation.getEnd();
+                }
+            }
+            courses.getChildren().add(hBox);
         }
     }
 
