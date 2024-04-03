@@ -31,8 +31,10 @@ public class WeekdayController implements CalendarController {
     private VBox courses;
     private EDTCalendar edtCalendar;
     private LocalDateTime currentlyDisplayed;
-
-
+    private ArrayList<String> filteredCourses;
+    private ArrayList<String> filteredGroups;
+    private ArrayList<String> filteredRooms;
+    private ArrayList<String> filteredTypes;
     @FXML
     public void initialize() {
         currentlyDisplayed = LocalDateTime.now();
@@ -120,6 +122,59 @@ public class WeekdayController implements CalendarController {
         return groupsOfOverlapping;
     }
 
+    public Boolean isInList(ArrayList<String> filters, String check) {
+        if (check == null) {
+            return false;
+        }
+        for (String filter: filters
+             ) {
+            if (check.contains(filter)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean isInFilters(Reservation reservation) {
+        if (filteredCourses != null && !filteredCourses.isEmpty()) {
+            if (!isInList(filteredCourses,reservation.getNameOfReservation())) {
+                return false;
+            }
+        }
+        if (filteredGroups != null && !filteredGroups.isEmpty()) {
+            if (reservation.getAttendingGroups() == null)
+                return false;
+            Boolean isValid = false;
+            for (String group: reservation.getAttendingGroups()
+                 ) {
+                if (!isInList(filteredGroups,group)) {
+                    isValid = true;
+                }
+            }
+            if (!isValid)
+                return false;
+        }
+        if (filteredRooms != null && !filteredRooms.isEmpty()) {
+            if (reservation.getRooms() == null)
+                return false;
+            Boolean isValid = false;
+            for (String room: reservation.getRooms()
+            ) {
+                if (isInList(filteredRooms,room)) {
+                    isValid = true;
+                }
+            }
+            if (!isValid)
+                return false;
+        }
+        if (filteredTypes != null && !filteredTypes.isEmpty()) {
+            if (!isInList(filteredTypes,reservation.getType())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void setDailyReservations(ArrayList<Reservation> weeklyReservations) throws IOException {
         courses.getChildren().clear();
         if (weeklyReservations.isEmpty()) return;
@@ -128,9 +183,17 @@ public class WeekdayController implements CalendarController {
         courses.setPickOnBounds(false);
         ArrayList<ArrayList<Reservation>> overlaps = getOverlappingReservations(weeklyReservations);
         LocalDateTime previousReservationEnd = weeklyReservations.get(0).getStart().withHour(8).withMinute(0);
+        System.out.println(currentlyDisplayed.getDayOfWeek());
         for (ArrayList<Reservation> overlap: overlaps
              ) {
-            LocalDateTime startOfHbox = overlap.get(0).getStart();
+            int i = 0;
+            while (i < overlap.size() && !isInFilters(overlap.get(i))) {
+                i++;
+            }
+            if (i == overlap.size()) {
+                continue;
+            }
+            LocalDateTime startOfHbox = overlap.get(i).getStart();
             long distanceToLastReservation = (int) (Duration.between(previousReservationEnd,startOfHbox).toMinutes() / 30);
             if (distanceToLastReservation > 0) {
                 Region region = new Region();
@@ -139,10 +202,14 @@ public class WeekdayController implements CalendarController {
                 region.setMouseTransparent(true);
                 courses.getChildren().add(region);
             }
+            previousReservationEnd = overlap.get(i).getEnd();
             HBox hBox = new HBox();
             hBox.prefWidthProperty().bind(courses.prefWidthProperty());
-            for (Reservation reservation: overlap
+            for (Reservation reservation: overlap.subList(i,overlap.size())
                  ) {
+                if (!isInFilters(reservation)) {
+                    continue;
+                }
                 VBox vBox = new VBox();
                 long distanceToStartOfHbox = (int) (Duration.between(startOfHbox,reservation.getStart()).toMinutes() / 30);
                 if (distanceToStartOfHbox > 0) {
@@ -163,7 +230,7 @@ public class WeekdayController implements CalendarController {
                 Tooltip.install(pane,tooltip);
                 pane.prefWidthProperty().bind(hBox.prefWidthProperty().divide(overlap.size()));
                 pane.prefHeightProperty().bind(courses.prefHeightProperty().divide(24).multiply(reservationLength));
-                pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10");
+                pane.setStyle("-fx-background-color: lightblue;-fx-border-color: #8bd2f1;-fx-background-radius: 10; -fx-border-radius: 10; text-emphasis: white;");
                 reservationController.setAll(reservation);
                 vBox.getChildren().add(pane);
                 hBox.getChildren().add(vBox);
@@ -186,6 +253,14 @@ public class WeekdayController implements CalendarController {
     @Override
     public void setEdtToDisplay(String url) throws IOException {
         edtCalendar = ICSParser.readICS(url);
+    }
+
+    public void setEdtCalendar(EDTCalendar edtCalendar) {
+        this.edtCalendar = edtCalendar;
+    }
+
+    public void setCurrentlyDisplayed(LocalDateTime currentlyDisplayed) {
+        this.currentlyDisplayed = currentlyDisplayed;
     }
 
     @Override
@@ -220,5 +295,49 @@ public class WeekdayController implements CalendarController {
     @Override
     public void setCustomCalendar(String customName) {
         edtCalendar.setCustomCalendar(customName);
+    }
+
+    @Override
+    public ArrayList<String> getCourses() {
+        return edtCalendar.getCourses();
+    }
+
+    @Override
+    public ArrayList<String> getGroups() {
+        return edtCalendar.getGroups();
+    }
+
+    @Override
+    public ArrayList<String> getRooms() {
+        return edtCalendar.getRooms();
+    }
+
+    @Override
+    public ArrayList<String> getTypes() {
+        return edtCalendar.getTypes();
+    }
+
+    @Override
+    public void setFilterCourses(ArrayList<String> courses) throws IOException {
+        filteredCourses = courses;
+        updateDisplay();
+    }
+
+    @Override
+    public void setFilterGroups(ArrayList<String> groups) throws IOException {
+        filteredGroups = groups;
+        updateDisplay();
+    }
+
+    @Override
+    public void setFilterRooms(ArrayList<String> rooms) throws IOException {
+        filteredRooms = rooms;
+        updateDisplay();
+    }
+
+    @Override
+    public void setFilterTypes(ArrayList<String> types) throws IOException {
+        filteredTypes = types;
+        updateDisplay();
     }
 }

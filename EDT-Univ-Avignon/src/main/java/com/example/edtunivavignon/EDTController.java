@@ -1,5 +1,6 @@
 package com.example.edtunivavignon;
 
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,12 +16,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.SearchableComboBox;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -53,6 +56,11 @@ public class EDTController {
     AnchorPane edtView;
     CalendarController edtController;
     private User user;
+    private CheckComboBox<String> courses;
+    private CheckComboBox<String> groups;
+    private CheckComboBox<String> rooms;
+    private CheckComboBox<String> types;
+
 
     private String urlDisplayed;
 
@@ -121,21 +129,96 @@ public class EDTController {
         setDisplayMode();
     }
 
+    public void setFilters() throws IOException {
+        edtController.setFilterCourses(new ArrayList<>(courses.getCheckModel().getCheckedItems()));
+        edtController.setFilterGroups(new ArrayList<>(groups.getCheckModel().getCheckedItems()));
+        edtController.setFilterRooms(new ArrayList<>(rooms.getCheckModel().getCheckedItems()));
+        edtController.setFilterTypes(new ArrayList<>(types.getCheckModel().getCheckedItems()));
+    }
+
+    public void createFilters() {
+        VBox filters = new VBox();
+        filters.prefWidthProperty().bind(calendarHbox.prefWidthProperty().divide(10));
+        filters.prefHeightProperty().bind(calendarHbox.prefHeightProperty());
+        courses = new CheckComboBox<>();
+        for (String course : edtController.getCourses()
+             ) {
+            courses.getItems().add(course);
+        }
+        courses.prefWidthProperty().bind(filters.prefWidthProperty());
+        courses.getCheckModel().getCheckedItems().addListener((ListChangeListener.Change<? extends String> tmp) -> {
+            try {
+                setFilters();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        filters.getChildren().add(courses);
+        
+        groups = new CheckComboBox<>();
+        for (String group : edtController.getGroups()
+        ) {
+            if (!groups.getItems().contains(group.replace(", ","")))
+                groups.getItems().add(group.replace(", ",""));
+        }
+        groups.prefWidthProperty().bind(filters.prefWidthProperty());
+        groups.getCheckModel().getCheckedItems().addListener((ListChangeListener.Change<? extends String> tmp) -> {
+            try {
+                setFilters();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        filters.getChildren().add(groups);
+
+        rooms = new CheckComboBox<>();
+        for (String room : edtController.getRooms()
+        ) {
+            if (!rooms.getItems().contains(room.replace(", ","")))
+                rooms.getItems().add(room.replace(", ",""));
+        }
+        rooms.prefWidthProperty().bind(filters.prefWidthProperty());
+        rooms.getCheckModel().getCheckedItems().addListener((ListChangeListener.Change<? extends String> tmp) -> {
+            try {
+                setFilters();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        filters.getChildren().add(rooms);
+
+        types = new CheckComboBox<>();
+        for (String type : edtController.getTypes()
+        ) {
+            types.getItems().add(type);
+        }
+        types.prefWidthProperty().bind(filters.prefWidthProperty());
+        types.getCheckModel().getCheckedItems().addListener((ListChangeListener.Change<? extends String> tmp) -> {
+            try {
+                setFilters();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        filters.getChildren().add(types);
+        calendarHbox.getChildren().add(filters);
+    }
+
     public void setDisplayMode() throws IOException {
         calendarHbox.getChildren().clear();
         FXMLLoader fxmlLoader = new FXMLLoader(loaderDisplayed);
         edtView = fxmlLoader.load();
         edtView.prefHeightProperty().bind(calendarHbox.prefHeightProperty());
-        edtView.prefWidthProperty().bind(calendarHbox.prefWidthProperty());
+        edtView.prefWidthProperty().bind(calendarHbox.prefWidthProperty().divide(10).multiply(9));
         edtView.setMinHeight(0);
         LocalDateTime previousDate = LocalDateTime.now();
         if (edtController != null) {
             previousDate = edtController.getDisplayedDate();
         }
         edtController = fxmlLoader.getController();
-        calendarHbox.getChildren().add(edtView);
         if (urlDisplayed != null) {
             edtController.setEdtToDisplay(urlDisplayed);
+            createFilters();
             if (Objects.equals(currentDisplay, "Salle")) {
                 Map<String, String> reversed = new HashMap<>();
                 for(Map.Entry<String, String> entry : roomToUrl.entrySet()){
@@ -148,6 +231,7 @@ public class EDTController {
             }
             edtController.displaySpecific(previousDate);
         }
+        calendarHbox.getChildren().add(edtView);
     }
 
     public void changeDisplayMode(ActionEvent actionEvent) throws IOException {

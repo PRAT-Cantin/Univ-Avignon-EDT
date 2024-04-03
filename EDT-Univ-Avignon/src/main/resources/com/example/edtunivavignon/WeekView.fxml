@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane fx:id="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.edtunivavignon.WeekController">
    <children>
-      <HBox prefHeight="757.0" prefWidth="1092.0">
+      <HBox prefHeight="757.6" prefWidth="1092.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="monday" />
             <AnchorPane fx:id="tuesday" />

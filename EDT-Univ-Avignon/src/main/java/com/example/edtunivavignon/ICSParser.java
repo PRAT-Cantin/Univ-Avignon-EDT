@@ -137,6 +137,7 @@ public class ICSParser {
             reader.mark(76);
         }
         edtCalendar.removeDuplicates();
+        edtCalendar.setFilters();
         return edtCalendar;
     }
 }

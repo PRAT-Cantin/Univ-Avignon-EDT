@@ -27,6 +27,10 @@ public class MonthController implements CalendarController{
     private EDTCalendar edtCalendar;
     private LocalDateTime currentlyDisplayed;
     private ArrayList<StackPane> panes;
+    private ArrayList<String> filteredCourses;
+    private ArrayList<String> filteredGroups;
+    private ArrayList<String> filteredRooms;
+    private ArrayList<String> filteredTypes;
 
     @FXML
     public void initialize() {
@@ -78,6 +82,9 @@ public class MonthController implements CalendarController{
                     panes.get((i*5)+j).getChildren().add(label);
                 }
                 localDateTime = localDateTime.plusDays(1);
+                if (localDateTime.getDayOfWeek() == DayOfWeek.SATURDAY) {
+                    localDateTime = localDateTime.plusDays(2);
+                }
             }
         }
     }
@@ -118,5 +125,44 @@ public class MonthController implements CalendarController{
     @Override
     public void setCustomCalendar(String customName) {
         edtCalendar.setCustomCalendar(customName);
+    }
+    @Override
+    public ArrayList<String> getCourses() {
+        return edtCalendar.getCourses();
+    }
+
+    @Override
+    public ArrayList<String> getGroups() {
+        return edtCalendar.getGroups();
+    }
+
+    @Override
+    public ArrayList<String> getRooms() {
+        return edtCalendar.getRooms();
+    }
+
+    @Override
+    public ArrayList<String> getTypes() {
+        return edtCalendar.getTypes();
+    }
+
+    @Override
+    public void setFilterCourses(ArrayList<String> courses) {
+        filteredCourses = courses;
+    }
+
+    @Override
+    public void setFilterGroups(ArrayList<String> groups) {
+        filteredGroups = groups;
+    }
+
+    @Override
+    public void setFilterRooms(ArrayList<String> rooms) {
+        filteredRooms = rooms;
+    }
+
+    @Override
+    public void setFilterTypes(ArrayList<String> types) {
+        filteredTypes = types;
     }
 }

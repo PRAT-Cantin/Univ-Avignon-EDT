@@ -100,15 +100,25 @@ public class WeekController implements CalendarController {
         setAllDates();
         ArrayList<ArrayList<Reservation>> weeklyReservations = edtCalendar.findWeeklyReservations(currentlyDisplayed);
         mondayController.setDailyReservations(weeklyReservations.get(0));
+        mondayController.setCurrentlyDisplayed(currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)));
         tuesdayController.setDailyReservations(weeklyReservations.get(1));
+        tuesdayController.setCurrentlyDisplayed(currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.TUESDAY)));
         wednesdayController.setDailyReservations(weeklyReservations.get(2));
+        wednesdayController.setCurrentlyDisplayed(currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.WEDNESDAY)));
         thursdayController.setDailyReservations(weeklyReservations.get(3));
+        thursdayController.setCurrentlyDisplayed(currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.THURSDAY)));
         fridayController.setDailyReservations(weeklyReservations.get(4));
+        fridayController.setCurrentlyDisplayed(currentlyDisplayed.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).plusDays(5).with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY)));
     }
 
     @Override
     public void setEdtToDisplay(String url) throws IOException {
         edtCalendar = ICSParser.readICS(url);
+        mondayController.setEdtCalendar(edtCalendar);
+        tuesdayController.setEdtCalendar(edtCalendar);
+        wednesdayController.setEdtCalendar(edtCalendar);
+        thursdayController.setEdtCalendar(edtCalendar);
+        fridayController.setEdtCalendar(edtCalendar);
     }
 
     @Override
@@ -143,5 +153,61 @@ public class WeekController implements CalendarController {
     @Override
     public void setCustomCalendar(String customName) {
         edtCalendar.setCustomCalendar(customName);
+    }
+
+    @Override
+    public ArrayList<String> getCourses() {
+        return edtCalendar.getCourses();
+    }
+
+    @Override
+    public ArrayList<String> getGroups() {
+        return edtCalendar.getGroups();
+    }
+
+    @Override
+    public ArrayList<String> getRooms() {
+        return edtCalendar.getRooms();
+    }
+
+    @Override
+    public ArrayList<String> getTypes() {
+        return edtCalendar.getTypes();
+    }
+
+    @Override
+    public void setFilterCourses(ArrayList<String> courses) throws IOException {
+        mondayController.setFilterCourses(courses);
+        tuesdayController.setFilterCourses(courses);
+        wednesdayController.setFilterCourses(courses);
+        thursdayController.setFilterCourses(courses);
+        fridayController.setFilterCourses(courses);
+    }
+
+    @Override
+    public void setFilterGroups(ArrayList<String> groups) throws IOException {
+        mondayController.setFilterGroups(groups);
+        tuesdayController.setFilterGroups(groups);
+        wednesdayController.setFilterGroups(groups);
+        thursdayController.setFilterGroups(groups);
+        fridayController.setFilterGroups(groups);
+    }
+
+    @Override
+    public void setFilterRooms(ArrayList<String> rooms) throws IOException {
+        mondayController.setFilterRooms(rooms);
+        tuesdayController.setFilterRooms(rooms);
+        wednesdayController.setFilterRooms(rooms);
+        thursdayController.setFilterRooms(rooms);
+        fridayController.setFilterRooms(rooms);
+    }
+
+    @Override
+    public void setFilterTypes(ArrayList<String> types) throws IOException {
+        mondayController.setFilterTypes(types);
+        tuesdayController.setFilterTypes(types);
+        wednesdayController.setFilterTypes(types);
+        thursdayController.setFilterTypes(types);
+        fridayController.setFilterTypes(types);
     }
 }

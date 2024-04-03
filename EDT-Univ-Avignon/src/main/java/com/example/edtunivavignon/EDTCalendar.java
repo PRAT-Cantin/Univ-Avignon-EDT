@@ -14,6 +14,12 @@ public class EDTCalendar {
 
     private String calDesc;
 
+    private ArrayList<String> courses;
+    private ArrayList<String> groups;
+    private ArrayList<String> rooms;
+    private ArrayList<String> types;
+
+
     public void setCalDesc(String calDesc) {
         this.calDesc = calDesc;
     }
@@ -42,10 +48,27 @@ public class EDTCalendar {
         reservations = new ArrayList<>();
     }
 
+    public ArrayList<String> getGroups() {
+        return groups;
+    }
+
+    public ArrayList<String> getRooms() {
+        return rooms;
+    }
+
+    public ArrayList<String> getTypes() {
+        return types;
+    }
+
+    public ArrayList<String> getCourses() {
+        return courses;
+    }
+
     public void setCustomCalendar(String customCalendar) {
         this.customCalendar = customCalendar;
         UserDB userDB = new UserDB();
         reservations.addAll(userDB.getReservations(customCalendar));
+        setFilters();
     }
 
     public void setCalendarStart(LocalDateTime calendarStart) {
@@ -113,5 +136,30 @@ public class EDTCalendar {
     }
     public void removeDuplicates() {
         reservations = new ArrayList<>(new HashSet<> (reservations));
+    }
+    public void setFilters() {
+        courses = new ArrayList<>();
+        groups = new ArrayList<>();
+        rooms = new ArrayList<>();
+        types = new ArrayList<>();
+        for (Reservation reservation: reservations
+             ) {
+            if (reservation.getNameOfReservation() != null)
+                courses.add(reservation.getNameOfReservation());
+            if (reservation.getAttendingGroups() != null)
+                groups.addAll(reservation.getAttendingGroups());
+            if (reservation.getRooms() != null)
+                rooms.addAll(reservation.getRooms());
+            if (reservation.getType() != null)
+                types.add(reservation.getType());
+        }
+        courses = new ArrayList<>(new HashSet<> (courses));
+        groups = new ArrayList<>(new HashSet<> (groups));
+        rooms = new ArrayList<>(new HashSet<> (rooms));
+        types = new ArrayList<>(new HashSet<> (types));
+        courses.sort(String::compareTo);
+        groups.sort(String::compareTo);
+        rooms.sort(String::compareTo);
+        types.sort(String::compareTo);
     }
 }
