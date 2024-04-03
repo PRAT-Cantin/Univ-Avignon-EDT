@@ -10,4 +10,5 @@ public interface CalendarController {
     public void displayPrevious() throws IOException;
     public void displaySpecific(LocalDateTime localDateTime) throws IOException;
     public LocalDateTime getDisplayedDate();
+    public void setCustomCalendar(String customName);
 }

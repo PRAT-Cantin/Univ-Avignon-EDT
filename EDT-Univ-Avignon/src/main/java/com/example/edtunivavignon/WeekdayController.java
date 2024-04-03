@@ -4,7 +4,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -25,7 +24,7 @@ public class WeekdayController implements CalendarController {
     @FXML
     private AnchorPane schedule;
     @FXML
-    AnchorPane labels;
+    private AnchorPane labels;
     @FXML
     private AnchorPane root;
     private VBox intervals;
@@ -169,5 +168,10 @@ public class WeekdayController implements CalendarController {
     @Override
     public LocalDateTime getDisplayedDate() {
         return currentlyDisplayed;
+    }
+
+    @Override
+    public void setCustomCalendar(String customName) {
+        edtCalendar.setCustomCalendar(customName);
     }
 }

@@ -20,6 +20,8 @@ public class EDTCalendar {
 
     ArrayList<Reservation> reservations;
 
+    private String customCalendar;
+
     @Override
     public String toString() {
         return "EDTCalendar{" +
@@ -38,6 +40,12 @@ public class EDTCalendar {
 
     public EDTCalendar() {
         reservations = new ArrayList<>();
+    }
+
+    public void setCustomCalendar(String customCalendar) {
+        this.customCalendar = customCalendar;
+        UserDB userDB = new UserDB();
+        reservations.addAll(userDB.getReservations(customCalendar));
     }
 
     public void setCalendarStart(LocalDateTime calendarStart) {
@@ -83,7 +91,21 @@ public class EDTCalendar {
         }
         return dailyReservations;
     }
-
+    public Boolean checkIfTaken(LocalDateTime start, LocalDateTime end) {
+        reservations.sort(Comparator.comparing(Reservation::getStart));
+        for (int i = 0; i < reservations.size(); i++) {
+            if (start.isBefore(reservations.get(i).getStart()) && end.isBefore(reservations.get(i).getStart())) {
+                continue;
+            }
+            if ((start.isBefore(reservations.get(i).getStart()) || start.isEqual(reservations.get(i).getStart())) && (end.isAfter(reservations.get(i).getStart()) || end.isEqual(reservations.get(i).getEnd()))) {
+                return true;
+            }
+            if (start.isBefore(reservations.get(i).getEnd()) && end.isBefore(reservations.get(i).getEnd())) {
+                return false;
+            }
+        }
+        return false;
+    }
     public void removeDuplicates() {
         reservations = new ArrayList<>(new HashSet<> (reservations));
     }

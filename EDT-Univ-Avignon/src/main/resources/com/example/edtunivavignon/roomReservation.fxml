@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.Color?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="488.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="208.0" layoutY="72.0" prefHeight="468.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label text="Nom de la réservation" />
+            <TextField fx:id="eventName" />
+            <Label text="Professeurs en charge" />
+            <TextField fx:id="teachers" promptText="Prof 1; Prof 2; ..." />
+            <Label text="Salle concernée" />
+            <ComboBox fx:id="rooms" />
+            <Label text="Date de réservation" />
+            <HBox>
+               <children>
+                  <DatePicker fx:id="eventDate" />
+               </children>
+            </HBox>
+            <Label text="Heure de début - Heure de fin" />
+            <HBox>
+               <children>
+                  <ComboBox fx:id="startTime" />
+                  <ComboBox fx:id="endTime" />
+               </children>
+            </HBox>
+            <Label text="Type de réservation" />
+            <ComboBox fx:id="eventType" prefWidth="150.0" />
+            <Label text="Groupes de TD" />
+            <TextField fx:id="attendingGroups" promptText="Groupe 1; Groupe 2; ..." />
+            <Label text="Promotions" />
+            <TextField fx:id="attendingPromotions" promptText="Promo 1; Promo 2; ..." />
+            <Label text="Couleur" />
+            <ColorPicker fx:id="color">
+               <value>
+                  <Color red="0.6784313917160034" green="0.8470588326454163" blue="0.9019607901573181" />
+               </value>
+            </ColorPicker>
+            <Label text="Informations supplémentaires" />
+            <TextArea fx:id="memo" prefHeight="82.0" prefWidth="600.0" />
+            <StackPane prefHeight="28.0" prefWidth="600.0">
+               <children>
+                  <Button fx:id="addButton" mnemonicParsing="false" text="Ajouter" StackPane.alignment="CENTER_RIGHT" />
+                  <Label fx:id="errorMsg" style="-fx-text-fill: red;" StackPane.alignment="BOTTOM_LEFT">
+                     <StackPane.margin>
+                        <Insets bottom="5.0" right="5.0" />
+                     </StackPane.margin>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

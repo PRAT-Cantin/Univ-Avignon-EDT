@@ -17,6 +17,7 @@ public class Reservation {
     private ArrayList<String> attendingPromotions;
     private String type;
     private Boolean isHoliday;
+    private String color;
 
     @Override
     public String toString() {
@@ -41,6 +42,14 @@ public class Reservation {
 
     public void setAttendingPromotions(ArrayList<String> attendingPromotions) {
         this.attendingPromotions = attendingPromotions;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     public void setType(String type) {
@@ -190,7 +199,7 @@ public class Reservation {
         if (type != null)
             extraInfo += "Type : " + type+ "\n";
         if (memo != null)
-            extraInfo += memo;
+            extraInfo += "Memo : " + memo;
         return extraInfo;
     }
 

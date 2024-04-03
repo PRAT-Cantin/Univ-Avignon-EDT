@@ -26,6 +26,7 @@ public class ReservationController {
     @FXML
     private AnchorPane root;
 
+
     @FXML
     public void initialize() {
         vBox.prefHeightProperty().bind(root.prefHeightProperty());
@@ -88,10 +89,10 @@ public class ReservationController {
         extraInfo += listToString(reservation.getAttendingPromotions(),"Promotion");
         extraInfo += listToString(reservation.getAttendingGroups(),"TD");
         extraInfo += listToString(reservation.getRooms(),"Salle");
-        if (reservation.getType() != null)
+        if (reservation.getType() != null && reservation.getType() != "")
             extraInfo += "Type : " + reservation.getType() + "\n";
-        if (reservation.getMemo() != null)
-            extraInfo += reservation.getMemo();
+        if (reservation.getMemo() != null && reservation.getMemo() != "")
+            extraInfo += "Memo : " + reservation.getMemo();
         information.setText(extraInfo);
         if (reservation.getTeachers() != null) {
             ContextMenu contextMenu = new ContextMenu();
@@ -115,7 +116,7 @@ public class ReservationController {
 
     private String listToString(ArrayList<String> list, String name) {
         String extraInfo = "";
-        if (list != null) {
+        if (list != null && list.get(0) != null && list.get(0) != "") {
             extraInfo += name;
             if (list.size() > 1) {
                 extraInfo += "s";
@@ -129,4 +130,6 @@ public class ReservationController {
         }
         return extraInfo;
     }
+
+
 }

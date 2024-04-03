@@ -139,4 +139,9 @@ public class WeekController implements CalendarController {
     public LocalDateTime getDisplayedDate() {
         return currentlyDisplayed;
     }
+
+    @Override
+    public void setCustomCalendar(String customName) {
+        edtCalendar.setCustomCalendar(customName);
+    }
 }
